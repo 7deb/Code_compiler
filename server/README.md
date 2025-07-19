@@ -41,7 +41,7 @@ cp .env.example .env
 # 3. Start all services
 docker compose up --build
 
-to stop the containers
+# 4. to stop the containers
 
 docker compose down
 
