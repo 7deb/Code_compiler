@@ -42,6 +42,8 @@ cp .env.example .env
 docker compose up --build
 
 # 4. to stop the containers
-
 docker compose down
 
+# 5. also run the below commands 
+docker build -t code_runner_cpp:latest ./src/docker/cpp
+docker build -t code_runner_python:latest ./src/docker/python
