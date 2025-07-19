@@ -32,8 +32,8 @@ You can run this backend using **Docker** (recommended) or **manually** on your 
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
+git clone https://github.com/7deb/Code_compiler.git
+cd Code_compiler
 
 # 2. Create .env from the example
 cp .env.example .env
