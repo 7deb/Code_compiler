@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Loginpage from './pages/Loginpage';
 import SignupPage from './pages/SignupPage';
 import { useAuthStore } from './store/useAuthStore';
-import { Toaster } from 'react-hot-toast'; 
+import { Toaster } from 'react-hot-toast';
 import HomePage from './pages/Homepage';
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <>
-    <Toaster 
+      <Toaster
         position="top-center"
         toastOptions={{
           duration: 3000,
@@ -26,22 +26,22 @@ const App = () => {
             background: '#363636',
             color: '#fff',
           },
-        }} 
+        }}
       />
-    <Routes>
-      {authUser ? (
+      <Routes>
+        {authUser ? (
         <>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </>
-      ) : (
+        ) : (
         <>
           <Route path="/login" element={<Loginpage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </>
       )}
-    </Routes>
+      </Routes>
     </>
   );
 };

@@ -9,16 +9,16 @@ const Navbar = () => {
         <div className="w-full bg-black border-b border-cyan-500 px-6 py-3 font-mono">
             <div className="flex justify-between items-center">
                 {/* Left section - Den title */}
-                <span className="text-cyan-400 font-bold">hacker's_den</span>
+                <span className=""></span>
 
                 {/* Middle section - Empty space or additional elements */}
-                <div className="flex-1"></div>
+                <div className="flex-1 text-cyan-400 font-bold">hacker's_den</div>
 
                 {/* Right section - User info */}
                 <div className="flex items-center space-x-4">
                     {authUser && (
                         <span className="text-green-400">
-                            hi Techy__.{authUser.name.split(' ')[0].toLowerCase()}__
+                            hi Techy__.<b className='text-xl'>{authUser.name.split(' ')[0].toLowerCase()}</b>
                         </span>
                     )}
                 </div>

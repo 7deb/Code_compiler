@@ -6,6 +6,7 @@ export const executeCode = async ( req: Request,res: Response): Promise<void> =>
 
   if (!code || !language) {
     res.status(400).json({ success: false, error: "Missing required fields" });
+    res.json("hello from browser")
     return;
   }
 

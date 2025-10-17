@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Editor from "@monaco-editor/react";
 import { Button, Select } from '@headlessui/react';
 import { toast } from 'react-hot-toast';
@@ -12,7 +12,6 @@ const CompilerPage = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
-  const [showIO, setShowIO] = useState(false);
   const editorRef = useRef(null);
 
   const languages = [
@@ -26,10 +25,9 @@ const CompilerPage = () => {
 
   const handleRunCode = async () => {
     if (!editorRef.current) return;
-    
+
     setIsRunning(true);
     setOutput('$ Running your code...');
-    setShowIO(true); // Always show output when running code
     const startTime = performance.now();
 
     try {
@@ -68,37 +66,47 @@ const CompilerPage = () => {
   };
 
   return (
-    <div className="w-full p-4 flex flex-col bg-[#1e1e1e] rounded-lg border border-[#474747] overflow-hidden">
+    <div className="w-full flex flex-col bg-[#1e1e1e] rounded-lg border border-cyan-500 overflow-hidden">
       {/* Compiler Header */}
-      <div className="flex justify-between items-center p-2 bg-[#252526] border-b border-[#474747]">
-        <div className="flex items-center space-x-2">
+      <div className="flex justify-between items-center p-3 bg-black border-b border-cyan-500">
+        <div className="flex items-center space-x-4">
           <Select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="text-xs bg-[#3e3e42] text-white rounded px-2 py-1 border border-[#007acc]"
+            className="text-sm bg-gray-900 text-cyan-400 rounded px-3 py-1 border border-cyan-500 font-mono"
             disabled={isRunning}
           >
             {languages.map((lang) => (
-              <option key={lang.value} value={lang.value}>
+              <option
+                key={lang.value}
+                value={lang.value}
+                className="bg-gray-900 text-cyan-400"
+              >
                 {lang.label}
               </option>
             ))}
           </Select>
         </div>
-        
+
         <Button
           onClick={handleRunCode}
           disabled={isRunning}
-          className={`text-xs px-3 py-1 rounded bg-[#007acc] hover:bg-[#0e639c] text-white ${
-            isRunning ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
+          className={`px-4 py-2 rounded bg-cyan-600 hover:bg-cyan-700 text-white font-mono text-sm ${isRunning ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
         >
-          {isRunning ? 'Running...' : 'Run'}
+          {isRunning ? (
+            <>
+              <span className="animate-pulse">EXECUTING</span>
+              <span className="blinking-cursor ml-1">_</span>
+            </>
+          ) : (
+            'RUN CODE'
+          )}
         </Button>
       </div>
 
       {/* Code Editor */}
-      <div className="h-64">
+      <div className="h-96 border-b border-cyan-500">
         <Editor
           height="100%"
           language={language}
@@ -108,42 +116,49 @@ const CompilerPage = () => {
           theme="vs-dark"
           options={{
             minimap: { enabled: false },
-            fontSize: 13,
+            fontSize: 14,
             scrollBeyondLastLine: false,
             automaticLayout: true,
             lineNumbers: 'on',
             glyphMargin: false,
+            renderLineHighlight: 'gutter',
           }}
         />
       </div>
 
-      {/* Input/Output Section - Only shown when needed */}
-      {showIO && (
-        <div className="bg-[#252526] border-t border-[#474747]">
-          {/* Input */}
-          {input && (
-            <div className="p-2 border-b border-[#474747]">
-              <div className="text-xs text-gray-400 mb-1">Input</div>
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="w-full bg-[#1e1e1e] text-white text-xs p-2 font-mono rounded border border-[#474747]"
-                rows={3}
-                placeholder="Enter input..."
-                disabled={isRunning}
-              />
-            </div>
-          )}
-          
-          {/* Output */}
-          <div className="p-2">
-            <div className="text-xs text-gray-400 mb-1">Output</div>
-            <pre className="bg-[#1e1e1e] text-green-400 text-xs p-2 rounded font-mono whitespace-pre-wrap overflow-auto max-h-40">
-              {output || 'Output will appear here...'}
-            </pre>
-          </div>
-        </div>
-      )}
+      {/* Input Section - Always visible */}
+      <div className="bg-gray-900 p-3 border-b border-cyan-500">
+        <div className="text-cyan-400 text-sm font-mono mb-2">> INPUT</div>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="w-full bg-black text-green-400 text-sm p-3 font-mono rounded border border-cyan-500 focus:border-cyan-300 focus:ring-1 focus:ring-cyan-300"
+          rows={4}
+          placeholder="Enter program input here..."
+          disabled={isRunning}
+          spellCheck="false"
+        />
+      </div>
+
+      {/* Output Section - Always visible */}
+      <div className="bg-gray-900 p-3 flex-grow">
+        <div className="text-cyan-400 text-sm font-mono mb-2">> OUTPUT</div>
+        <pre className="bg-black text-green-400 text-sm p-3 font-mono rounded border border-cyan-500 whitespace-pre-wrap overflow-auto h-32">
+          {output || '$ Ready for execution...'}
+        </pre>
+      </div>
+
+      {/* Blinking cursor animation */}
+      <style jsx>{`
+        .blinking-cursor {
+          animation: blink 1s step-end infinite;
+          color: #4ade80;
+        }
+        @keyframes blink {
+          from, to { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 };
