@@ -74,6 +74,7 @@ const SignupPage = () => {
             className="w-full px-4 py-2 rounded bg-sky-500 text-white hover:bg-sky-600 disabled:opacity-50"
           >
             {isSigningUp ? 'Signing up...' : 'Sign Up'}
+            
           </Button>
         </div>
       </form>

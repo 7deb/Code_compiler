@@ -11,9 +11,6 @@ This is the backend for an online code execution platform, built with **Node.js*
 - 🐘 PostgreSQL + Prisma ORM
 - 🚀 TypeScript + Express server
 - 🔐 JWT-based authentication
-- 🐳 Full Docker support
-
----
 
 ## 🚀 Getting Started
 

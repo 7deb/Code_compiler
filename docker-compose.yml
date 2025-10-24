@@ -1,0 +1,72 @@
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: compiler_postgres_db
+    env_file:
+      - server/.env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - "5431:5432" 
+    restart: always
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: compiler_api_server
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./code-execution-temp:/usr/src/app/code-execution-temp
+    env_file:
+      - server/.env 
+    networks:
+      - app-network
+    depends_on:
+      - db
+    
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: compiler_web_client
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    networks:
+      - app-network
+  
+  code_runner_cpp:
+    build:
+      context: .
+      dockerfile: server/src/docker/cpp/Dockerfile
+    image: code_runner_cpp:latest
+    networks:
+      - app-network
+    volumes:
+      - ./code-execution-temp:/usr/src/app/code-execution-temp 
+    
+  code_runner_python:
+    build:
+      context: .
+      dockerfile: server/src/docker/python/Dockerfile
+    image: code_runner_python:latest
+    networks:
+      - app-network
+    volumes:
+      - ./code-execution-temp:/usr/src/app/code-execution-temp 
+
+volumes:
+  postgres_data: {}
+
+networks:
+  app-network:
+    driver: bridge

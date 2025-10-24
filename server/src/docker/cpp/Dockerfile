@@ -2,6 +2,4 @@ FROM gcc:latest
 
 WORKDIR /usr/src/app
 
-COPY . .
-
-CMD ["sh", "-c", "g++ user_code.cpp -o user_code && ./user_code"]
+CMD ["sh", "-c", "g++ code-execution-temp/user_code.cpp -o code-execution-temp/user_code_output && code-execution-temp/user_code_output"]
