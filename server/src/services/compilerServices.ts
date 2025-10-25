@@ -20,20 +20,23 @@ async function codeExecute(dockerImage: string,filePath: string,fileExtension: s
   const inputFileHost = path.join(path.dirname(filePath), "input.txt");
   const usercodeFile = path.join("/app", fileName);
   const inputFile = "/app/input.txt";
+  const outputFile = "/tmp/user_code_output";
 
   fs.writeFileSync(inputFileHost, input);
 
   let command;
   switch (fileExtension) {
     case ".cpp":
-      command = `g++ ${usercodeFile} -o /tmp/a.out && /tmp/a.out < ${inputFile}`;
+      command = `g++ ${usercodeFile} -o ${outputFile} && ${outputFile} < ${inputFile}`;
       break;
     case ".py":
-      command = `python ${usercodeFile} < ${inputFile}`;
+      command = `python3 ${usercodeFile} < ${inputFile}`;
       break;
     default:
       throw new Error("Unsupported file extension");
   }
+
+  console.log("Docker command:", command);
 
   return new Promise((resolve, reject) => {
     const dockerProcess = spawn("docker", ["run","--rm","-v",`${path.dirname(filePath)}:/app`,dockerImage,"bash","-c",command,]);
@@ -61,6 +64,7 @@ async function codeExecute(dockerImage: string,filePath: string,fileExtension: s
     });
   });
 }
+
 
 export const codeExecuter = async (code: string,language: string,input: string) => {
   const { dockerImage, extension } = await getDockerExtension(language);

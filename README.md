@@ -1,6 +1,6 @@
-# 🧠 Online Code Compiler Backend
+# 🧠 Code Compiler 
 
-This is the backend for an online code execution platform, built with **Node.js**, **TypeScript**, **PostgreSQL**, **Prisma**, and **Docker**. It supports dynamic code execution for **C++** and **Python** using containerized runners.
+The Code Compiler is a secure and scalable code execution platform built with **Node.js**, **TypeScript**, **PostgreSQL**, **Prisma**, and **Docker** **nginx**. It supports dynamic code execution for **C++** and **Python** using containerized runners.
 
 ---
 
@@ -11,6 +11,7 @@ This is the backend for an online code execution platform, built with **Node.js*
 - 🐘 PostgreSQL + Prisma ORM
 - 🚀 TypeScript + Express server
 - 🔐 JWT-based authentication
+- 🌐 Nginx reverse proxy for routing and load balancing 
 
 ## 🚀 Getting Started
 
@@ -32,8 +33,8 @@ You can run this backend using **Docker** (recommended) or **manually** on your 
 git clone https://github.com/7deb/Code_compiler.git
 cd Code_compiler
 
-# 2. Create .env from the example
-cp .env.example .env
+# 2. Create .env and add ur postgres database connection strings ports for running ur backend server etc etc 
+touch .env 
 
 # 3. Start all services
 docker compose up --build
@@ -44,3 +45,8 @@ docker compose down
 # 5. also run the below commands 
 docker build -t code_runner_cpp:latest ./src/docker/cpp
 docker build -t code_runner_python:latest ./src/docker/python
+```
+
+### Manual Setup 
+- Manual (non-Docker) setup instructions will be added soon.
+

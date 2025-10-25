@@ -25,6 +25,7 @@ services:
       - "4000:4000"
     volumes:
       - ./code-execution-temp:/usr/src/app/code-execution-temp
+      - /var/run/docker.sock:/var/run/docker.sock 
     env_file:
       - server/.env 
     networks:
