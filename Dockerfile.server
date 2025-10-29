@@ -15,10 +15,13 @@ RUN npx prisma generate
 COPY server/entrypoint.sh /usr/src/app/entrypoint.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
 
-RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+		&& apt-get install -y netcat-openbsd dos2unix docker.io \
+	&& dos2unix /usr/src/app/entrypoint.sh || true \
+	&& rm -rf /var/lib/apt/lists/*
 
 EXPOSE 4000
 
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["sh", "/usr/src/app/entrypoint.sh"]
 
 CMD [ "node","dist/server.js" ] 

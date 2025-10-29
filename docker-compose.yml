@@ -24,8 +24,15 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./code-execution-temp:/usr/src/app/code-execution-temp
-      - /var/run/docker.sock:/var/run/docker.sock 
+      # Use a Docker named volume for code execution so the Docker daemon can
+      # access the same files regardless of host/container path differences.
+      - code_exec:/usr/src/app/code-execution-temp
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Explicitly set the full volume name so `docker run -v <name>:/app` from
+      # inside the server container mounts the same named volume created by
+      # docker-compose (compose prefixes volume names with the project name).
+      - DOCKER_CODE_VOLUME_NAME=code_compiler_code_exec
     env_file:
       - server/.env 
     networks:
@@ -53,7 +60,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./code-execution-temp:/usr/src/app/code-execution-temp 
+      - code_exec:/usr/src/app/code-execution-temp
     
   code_runner_python:
     build:
@@ -63,10 +70,11 @@ services:
     networks:
       - app-network
     volumes:
-      - ./code-execution-temp:/usr/src/app/code-execution-temp 
+      - code_exec:/usr/src/app/code-execution-temp
 
 volumes:
   postgres_data: {}
+  code_exec: {}
 
 networks:
   app-network:

@@ -37,9 +37,30 @@ async function codeExecute(dockerImage: string,filePath: string,fileExtension: s
   }
 
   console.log("Docker command:", command);
+  // Debug: log where the file was written and whether it exists on the filesystem
+  console.log("host file path:", filePath);
+  console.log("file exists before docker run:", fs.existsSync(filePath));
 
   return new Promise((resolve, reject) => {
-    const dockerProcess = spawn("docker", ["run","--rm","-v",`${path.dirname(filePath)}:/app`,dockerImage,"bash","-c",command,]);
+    // If a Docker volume name is provided via env (set in docker-compose),
+    // mount the named volume instead of a host/container path. When the
+    // server is running inside a container and uses the Docker socket,
+    // mounting a container path as a host bind can fail because the daemon
+    // interprets the path on the host, not inside this container. Using a
+    // named volume avoids that mismatch.
+    const dockerVolumeName = process.env.DOCKER_CODE_VOLUME_NAME;
+    const mountSource = dockerVolumeName ? `${dockerVolumeName}:/app` : `${path.dirname(filePath)}:/app`;
+
+    const dockerProcess = spawn("docker", [
+      "run",
+      "--rm",
+      "-v",
+      mountSource,
+      dockerImage,
+      "bash",
+      "-c",
+      command,
+    ]);
 
     let output = "";
 
