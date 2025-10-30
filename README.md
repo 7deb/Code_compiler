@@ -25,6 +25,26 @@ You can run this backend using **Docker** (recommended) or **manually** on your 
 
 - Install [Docker](https://www.docker.com/products/docker-desktop)
 - Clone the repository
+- add .env in the root folders and server/ folders 
+
+### .env (root folder)
+```
+DATABASE_URL=
+DB_USER
+DB_PASSWORD=
+DB_NAME=
+```
+
+### .env (server)
+```
+PORT=
+DATABASE_URL=
+DB_USER
+DB_PASSWORD=
+DB_NAME=
+JWT_SECRET=
+```
+
 
 ### 🔧 Setup Steps
 
@@ -33,18 +53,13 @@ You can run this backend using **Docker** (recommended) or **manually** on your 
 git clone https://github.com/7deb/Code_compiler.git
 cd Code_compiler
 
-# 2. Create .env and add ur postgres database connection strings ports for running ur backend server etc etc 
-touch .env 
-
-# 3. Start all services
+# 2. Start all services
 docker compose up --build
 
-# 4. to stop the containers
+# 3. to stop the containers
 docker compose down
 
-# 5. also run the below commands 
-docker build -t code_runner_cpp:latest ./src/docker/cpp
-docker build -t code_runner_python:latest ./src/docker/python
+
 ```
 
 ### Manual Setup 
