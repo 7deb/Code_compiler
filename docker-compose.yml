@@ -32,7 +32,7 @@ services:
       # Explicitly set the full volume name so `docker run -v <name>:/app` from
       # inside the server container mounts the same named volume created by
       # docker-compose (compose prefixes volume names with the project name).
-      - DOCKER_CODE_VOLUME_NAME=code_compiler_code_exec
+      - DOCKER_CODE_VOLUME_NAME=compiler_code_exec
     env_file:
       - server/.env 
     networks:

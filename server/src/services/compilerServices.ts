@@ -51,16 +51,7 @@ async function codeExecute(dockerImage: string,filePath: string,fileExtension: s
     const dockerVolumeName = process.env.DOCKER_CODE_VOLUME_NAME;
     const mountSource = dockerVolumeName ? `${dockerVolumeName}:/app` : `${path.dirname(filePath)}:/app`;
 
-    const dockerProcess = spawn("docker", [
-      "run",
-      "--rm",
-      "-v",
-      mountSource,
-      dockerImage,
-      "bash",
-      "-c",
-      command,
-    ]);
+    const dockerProcess = spawn("docker", ["run","--rm","-v",mountSource,dockerImage,"bash","-c",command,]);
 
     let output = "";
 
